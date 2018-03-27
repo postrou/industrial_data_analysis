@@ -9,11 +9,11 @@ import numpy as np
 from model import RegressionModel
 
 
-def main(model_filename, X_filename):
+def main(X_filename, model_filename):
     """
     Call `predict` method from fitted `model` and save results to `result.txt`
-    :param model_filename: filename of saved model
     :param X_filename: object-feature predict matrix
+    :param model_filename: filename of saved model
     """
     X = np.loadtxt(X_filename)
 
