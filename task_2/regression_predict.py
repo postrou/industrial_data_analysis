@@ -1,18 +1,24 @@
 """
 This file is a python script, using given Regression model to predict some results
 """
+
 import sys
+import pickle
+import numpy as np
+
+from .model import RegressionModel
 
 
-def main(model, X):
+def main(model_filename, X):
     """
-    Call `predict` method from fitted `model`
-    :param model: fitted model object
+    Call `predict` method from fitted `model` and save results to `result.txt`
+    :param model_filename: filename of saved model
     :param X: object-feature predict matrix
-    :return: predicted results
     """
+    with open(model_filename, 'rb') as f:
+        model = pickle.load(f)
     result = model.predict(X)
-    return result
+    np.savetxt('result.txt', result)
 
 
 if __name__ == '__main__':
