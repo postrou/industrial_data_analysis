@@ -28,4 +28,4 @@ class RegressionModel(object):
         Predict method, uses standard predict function from scikit-learn
         :param X: object-feature predict matrix
         """
-        self.model.predict(X)
+        return self.model.predict(X)
