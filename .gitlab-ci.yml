@@ -12,9 +12,9 @@ pages:
         - cd task_2/doc
         - make html
         - mv _build/html ../../public
-        - cd ..
+        - cd ../..
     artifacts:
         paths:
             - public
     only:
-        - master
+        # - master
