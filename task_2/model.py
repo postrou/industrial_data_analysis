@@ -18,14 +18,20 @@ class RegressionModel(object):
     def fit(self, X, y):
         """
         Fit method, uses standard fit function from scikit-learn.
-        :param X: object-feature learn matrix
-        :param y: `y` values form `f(X) = y`
+
+        **Parameters**:
+
+        - `X`: object-feature learn matrix
+        - `y`: `y` values form `f(X) = y`
         """
         self.model.fit(X, y)
 
     def predict(self, X):
         """
-        Predict method, uses standard predict function from scikit-learn
-        :param X: object-feature predict matrix
+        Predict method, uses standard predict function from scikit-learn, returning predicted results
+
+        **Parameters**:
+
+        - `X`: object-feature predict matrix
         """
         return self.model.predict(X)

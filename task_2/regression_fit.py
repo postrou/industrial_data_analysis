@@ -11,10 +11,13 @@ from model import RegressionModel
 
 def main(X_filename, y_filename, model_filename):
     """
-    Init RegressionModel object and call `fit` method with corresponding arguments and save it as `pickle`
-    :param X_filename: filename where object-feature matrix is saved
-    :param y_filename: filename of `y` values form `f(X) = y`
-    :param model_filename: name of file to save model
+    Init RegressionModel object and call `fit` method with corresponding arguments and save it as `pickle`.
+
+    **Parameters**:
+
+    - `X_filename`: filename where object-feature matrix is saved
+    - `y_filename`: filename of `y` values form `f(X) = y`
+    - `model_filename`: name of file to save model
     """
     X = np.loadtxt(X_filename)
     y = np.loadtxt(y_filename)
