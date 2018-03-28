@@ -9,11 +9,14 @@ import numpy as np
 from model import RegressionModel
 
 
-def main(model_filename, X_filename):
+def main(X_filename, model_filename):
     """
     Call `predict` method from fitted `model` and save results to `result.txt`
-    :param model_filename: filename of saved model
-    :param X_filename: object-feature predict matrix
+
+    **Parameters**:
+
+    - `X_filename`: object-feature predict matrix
+    - `model_filename`: filename of saved model
     """
     X = np.loadtxt(X_filename)
 
@@ -21,7 +24,7 @@ def main(model_filename, X_filename):
         model = pickle.load(f)
 
     result = model.predict(X)
-    np.savetxt('result.txt', result)
+    np.savetxt('data/result.txt', result)
 
 
 if __name__ == '__main__':

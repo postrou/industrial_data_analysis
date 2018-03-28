@@ -1,5 +1,5 @@
-ostroukhovpa
-============
+task_1
+======
 
 .. toctree::
    :maxdepth: 4

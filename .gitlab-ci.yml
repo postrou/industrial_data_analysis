@@ -9,10 +9,10 @@ pages:
   # - apk --no-cache add python3-dev py-pip python3-sphinx
   # - apk --no-cache add make
         # - pip install sphinx
-        - cd doc
+        - cd task_2/doc
         - make html
-        - mv _build/html ../public
-        - cd ..
+        - mv _build/html ../../public
+        - cd ../..
     artifacts:
         paths:
             - public
