@@ -10,8 +10,8 @@ before_script:
 
 pages:
     script:
-        - pip install sphinx
-        - pip install numpy, sklearn
+        - pip install --upgrade pip
+        - pip install sphinx numpy sklearn
         - cd task_2/doc
         - make html
         - mv _build/html ../../public
