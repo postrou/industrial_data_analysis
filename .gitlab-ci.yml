@@ -1,6 +1,6 @@
 # image: ubuntu
 # image: alpine
-image: arch
+image: archlinux
 
 before_script:
     # - apt-get -qy update
