@@ -9,6 +9,7 @@ pages:
   # - apk --no-cache add python3-dev py-pip python3-sphinx
   # - apk --no-cache add make
         # - pip install sphinx
+        - pip install numpy, sklearn
         - cd task_2/doc
         - make html
         - mv _build/html ../../public
