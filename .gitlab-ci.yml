@@ -1,22 +1,19 @@
-# image: ubuntu
-# image: alpine
-image: archlinux
+image: ubuntu
 
 before_script:
-    # - apt-get -qy update
-    # - apt-get install -y make build-essential python3 python3-dev python3-setuptools python3-sphinx python3-pip
+    - apt-get -qy update
+    - apt-get install -y make build-essential python3 python3-dev python3-setuptools python3-sphinx python3-pip
     # - apk --no-cache add python3 python3-dev py-pip
     # - apk --no-cache add make
-    - pacman -S python3 python3-dev python3-pip
 
 pages:
     script:
-        - pip install --upgrade pip
-        - pip install sphinx numpy sklearn
-        - cd task_2/doc
+        - pip3 install --upgrade pip
+        - pip3 install sphinx numpy sklearn
+        - cd doc
         - make html
-        - mv _build/html ../../public
-        - cd ../..
+        - mv _build/html ../public
+        - cd ..
     artifacts:
         paths:
             - public
