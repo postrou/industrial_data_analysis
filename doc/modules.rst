@@ -1,5 +1,5 @@
-task_2
-======
+ostroukhovpa
+============
 
 .. toctree::
    :maxdepth: 4
@@ -7,3 +7,4 @@ task_2
    model
    regression_fit
    regression_predict
+   statemachine
