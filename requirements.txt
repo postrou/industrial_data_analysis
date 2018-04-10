@@ -1,0 +1,1 @@
+sphinx numpy scipy pandas sklearn
