@@ -1,1 +1,5 @@
-sphinx numpy scipy pandas sklearn
+sphinx 
+numpy 
+scipy 
+pandas 
+sklearn
