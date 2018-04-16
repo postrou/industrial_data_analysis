@@ -1,5 +1,5 @@
-sphinx 
-numpy 
-scipy 
-pandas 
+sphinx
+numpy
+scipy
+pandas
 sklearn
