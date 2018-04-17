@@ -60,7 +60,7 @@ doc:
         - sphinx-apidoc -o . ..
 
 pages:
-    images: $CONTAINER_IMAGE
+    image: $CONTAINER_IMAGE
     script:
         - make html
         - mv _build/html ../public
