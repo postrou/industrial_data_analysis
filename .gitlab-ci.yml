@@ -33,16 +33,16 @@ build:
         - docker build -t $CONTAINER_IMAGE .
 
 test:
-stage: test
-  image: $CONTAINER_IMAGE
-  script:
-    - python3 test_project.py
+    stage: test
+    image: $CONTAINER_IMAGE
+    script:
+        - python3 test_project.py
 
 doc:
-stage: doc
-  image: $CONTAINER_IMAGE
-  script:
-    - cd doc
+    stage: doc
+    image: $CONTAINER_IMAGE
+    script:
+        - cd doc
 #    - sphinx-quickstart \
 #      --sep "n"           \
 #      --dot _           \
@@ -57,19 +57,19 @@ stage: doc
 #      --makefile        \
 #      --no-batchfile    \
 #      --ext-autodoc
-    - sphinx-apidoc -o . ..
+        - sphinx-apidoc -o . ..
 
 pages:
-  images: $CONTAINER_IMAGE
-  script:
-    - make html
-    - mv _build/html ../public
+    images: $CONTAINER_IMAGE
+    script:
+        - make html
+        - mv _build/html ../public
     artifacts:
-      paths:
-        - /project/public
+        paths:
+            - /project/public
     only:
-      - master
-      - release
+        - master
+        - release
 
 #image: ubuntu
 #
