@@ -27,16 +27,18 @@ before_script:
 variables:
   CONTAINER_IMAGE: registry.gitlab.com/se_ml_course/ostroukhovpa/task_4
 
-#build:
+build:
 stage: build
   script:
     - docker build -t $CONTAINER_IMAGE .
 
+test:
 stage: test
   image: $CONTAINER_IMAGE
   script:
     - python3 test_project.py
 
+doc:
 stage: doc
   image: $CONTAINER_IMAGE
   script:
