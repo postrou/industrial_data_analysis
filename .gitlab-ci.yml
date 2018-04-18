@@ -20,6 +20,7 @@ stages:
   - build
   - test
   - doc
+  - pages
 
 before_script:
   - docker info
@@ -34,7 +35,7 @@ build:
 
 test:
     stage: test
-    image: lkmlkl
+    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/task_4:latest"
     script:
         - python3 test_project.py
 
