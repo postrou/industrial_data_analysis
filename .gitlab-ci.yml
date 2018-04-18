@@ -40,7 +40,7 @@ test:
 
 doc:
     stage: doc
-    image: $CONTAINER_IMAGE
+    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/task_4:latest"
     script:
         - cd doc
 #    - sphinx-quickstart \
@@ -60,7 +60,7 @@ doc:
         - sphinx-apidoc -o . ..
 
 pages:
-    image: $CONTAINER_IMAGE
+    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/task_4:latest"
     script:
         - make html
         - mv _build/html ../public
