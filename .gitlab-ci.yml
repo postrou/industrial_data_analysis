@@ -25,7 +25,7 @@ before_script:
   - docker info
 
 variables:
-  CONTAINER_IMAGE: registry.gitlab.com/se_ml_course/ostroukhovpa/task_4
+  CONTAINER_IMAGE: registry.gitlab.com/se_ml_course/ostroukhovpa/task_4:latest
 
 build:
     stage: build
