@@ -34,7 +34,7 @@ build:
 
 test:
     stage: test
-    image: $CONTAINER_IMAGE
+    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/task_4:latest"
     script:
         - python3 test_project.py
 
