@@ -26,22 +26,23 @@ before_script:
   - docker info
 
 variables:
-  CONTAINER_IMAGE: registry.gitlab.com/se_ml_course/ostroukhovpa/task_4:latest
+  CONTAINER_IMAGE: registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4
 
 build:
     stage: build
     script:
         - docker build -t $CONTAINER_IMAGE .
+        - docker push $CONTAINER_IMAGE
 
 test:
     stage: test
-    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/task_4:latest"
+    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
     script:
         - python3 test_project.py
 
 doc:
     stage: doc
-    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/task_4:latest"
+    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
     script:
         - cd doc
 #    - sphinx-quickstart \
@@ -61,7 +62,7 @@ doc:
         - sphinx-apidoc -o . ..
 
 pages:
-    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/task_4:latest"
+    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
     script:
         - make html
         - mv _build/html ../public
