@@ -32,7 +32,7 @@ build:
     stage: build
     script:
         - docker build -t $CONTAINER_IMAGE .
-        - docker login -u twelveth -p $CI_BUILD_TOKEN
+        - docker login -u twelveth -p $CI_LOGIN_TOKEN
         - docker push $CONTAINER_IMAGE
 
 test:
