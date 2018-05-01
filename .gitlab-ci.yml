@@ -59,8 +59,9 @@ doc:
 #      --makefile        \
 #      --no-batchfile    \
 #      --ext-autodoc
-        # - docker run $CONTAINER_IMAGE /bin/bash -c cd doc
-        - docker run $CONTAINER_IMAGE /bin/bash -c sphinx-apidoc -o ./doc .
+        - docker run $CONTAINER_IMAGE /bin/bash -c ls
+        - docker run $CONTAINER_IMAGE /bin/bash -c cd doc
+        - docker run $CONTAINER_IMAGE /bin/bash -c sphinx-apidoc -f -o . ..
 
 pages:
     image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
