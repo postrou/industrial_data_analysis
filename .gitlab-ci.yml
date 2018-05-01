@@ -41,13 +41,14 @@ build:
 
 test:
     stage: test
-    image: $CONTAINER_IMAGE
+    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
     script:
-        - python3 test_project.py
+        - docker pull $CONTAINER_IMAGE
+        - docker run $CONTAINER_IMAGE python3 test_project.py
 
 doc:
     stage: doc
-    image: $CONTAINER_IMAGE
+    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
     script:
         - cd doc
 #    - sphinx-quickstart \
@@ -67,7 +68,7 @@ doc:
         - sphinx-apidoc -o . ..
 
 pages:
-    image: $CONTAINER_IMAGE
+    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
     script:
         - make html
         - mv _build/html ../public
