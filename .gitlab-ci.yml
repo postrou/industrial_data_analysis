@@ -31,7 +31,8 @@ variables:
 build:
     stage: build
     script:
-        - echo $CI_LOGIN_TOKEN
+        # - echo $CI_LOGIN_TOKEN
+        - echo $CI_JOB_TOKEN
         # - docker build -t $CONTAINER_IMAGE .
         # - docker login registry.gitlab.com -u gitlab-ci-token -p $CI_LOGIN_TOKEN
         # - docker push $CONTAINER_IMAGE
