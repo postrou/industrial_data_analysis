@@ -43,7 +43,7 @@ test:
     stage: test
     script:
         - docker pull $CONTAINER_IMAGE
-        - docker run $CONTAINER_IMAGE python3 test_project.py
+        - docker run $CONTAINER_IMAGE
 
 doc:
     stage: doc
