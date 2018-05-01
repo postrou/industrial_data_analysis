@@ -26,18 +26,18 @@ before_script:
   - docker info
 
 variables:
-  CONTAINER_IMAGE: registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4
+#   CONTAINER_IMAGE: registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4
 
 build:
     stage: build
     script:
         # - echo $CI_LOGIN_TOKEN
-        - echo $CI_REGISTRY_PASSWORD
-        - echo $CI_REGISTRY_USER
-        - echo $CI_REGISTRY_IMAGE
-        # - docker build -t $CONTAINER_IMAGE .
-        # - docker login registry.gitlab.com -u gitlab-ci-token -p $CI_LOGIN_TOKEN
-        # - docker push $CONTAINER_IMAGE
+        # - echo $CI_REGISTRY_PASSWORD
+        # - echo $CI_REGISTRY_USER
+        # - echo $CI_REGISTRY_IMAGE
+        - docker build -t $CI_REGISTRY_IMAGE/test_doc:task_4 .
+        - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+        - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
 
 # test:
 #     stage: test
