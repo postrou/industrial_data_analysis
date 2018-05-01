@@ -59,7 +59,6 @@ doc:
 #      --makefile        \
 #      --no-batchfile    \
 #      --ext-autodoc
-        - docker run $CONTAINER_IMAGE
         - docker run $CONTAINER_IMAGE sphinx-apidoc -o doc .
 
 pages:
