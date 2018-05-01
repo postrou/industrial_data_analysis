@@ -41,16 +41,14 @@ build:
 
 test:
     stage: test
-    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
     script:
         - docker pull $CONTAINER_IMAGE
         - docker run $CONTAINER_IMAGE python3 test_project.py
 
 doc:
     stage: doc
-    image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
     script:
-        - cd doc
+        - docker pull $CONTAINER_IMAGE
 #    - sphinx-quickstart \
 #      --sep "n"           \
 #      --dot _           \
@@ -65,7 +63,8 @@ doc:
 #      --makefile        \
 #      --no-batchfile    \
 #      --ext-autodoc
-        - sphinx-apidoc -o . ..
+        - docker run $CONTAINER_IMAGE cd doc
+        - docker run $CONTAINER_IMAGE sphinx-apidoc -o . ..
 
 pages:
     image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
