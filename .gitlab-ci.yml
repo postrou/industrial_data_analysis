@@ -26,7 +26,7 @@ before_script:
   - docker info
 
 variables:
-#   CONTAINER_IMAGE: registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4
+  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test_doc:task_4
 
 build:
     stage: build
@@ -35,45 +35,45 @@ build:
         # - echo $CI_REGISTRY_PASSWORD
         # - echo $CI_REGISTRY_USER
         # - echo $CI_REGISTRY_IMAGE
-        - docker build -t $CI_REGISTRY_IMAGE/test_doc:task_4 .
+        - docker build -t $CONTAINER_IMAGE .
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
 
-# test:
-#     stage: test
-#     image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
-#     script:
-#         - python3 test_project.py
+test:
+    stage: test
+    image: $CONTAINER_IMAGE
+    script:
+        - python3 test_project.py
 
-# doc:
-#     stage: doc
-#     image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
-#     script:
-#         - cd doc
-# #    - sphinx-quickstart \
-# #      --sep "n"           \
-# #      --dot _           \
-# #      -p ostroukhovpa   \
-# #      -a "Ostroukhov PA"\
-# #      -v 1.0            \
-# #      -r 1.0            \
-# #      -l en             \
-# #      --suffix .rst     \
-# #      --master index    \
-# #      --epub "n"          \
-# #      --makefile        \
-# #      --no-batchfile    \
-# #      --ext-autodoc
-#         - sphinx-apidoc -o . ..
+doc:
+    stage: doc
+    image: $CONTAINER_IMAGE
+    script:
+        - cd doc
+#    - sphinx-quickstart \
+#      --sep "n"           \
+#      --dot _           \
+#      -p ostroukhovpa   \
+#      -a "Ostroukhov PA"\
+#      -v 1.0            \
+#      -r 1.0            \
+#      -l en             \
+#      --suffix .rst     \
+#      --master index    \
+#      --epub "n"          \
+#      --makefile        \
+#      --no-batchfile    \
+#      --ext-autodoc
+        - sphinx-apidoc -o . ..
 
-# pages:
-#     image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
-#     script:
-#         - make html
-#         - mv _build/html ../public
-#     artifacts:
-#         paths:
-#             - /project/public
-#     only:
-#         - master
-#         - release
+pages:
+    image: $CONTAINER_IMAGE
+    script:
+        - make html
+        - mv _build/html ../public
+    artifacts:
+        paths:
+            - /project/public
+    only:
+        - master
+        - release
