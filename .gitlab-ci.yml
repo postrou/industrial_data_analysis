@@ -29,17 +29,17 @@ before_script:
 variables:
   CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test_doc:task_4
 
-build:
-    stage: build
-    script:
-        - docker build -t $CONTAINER_IMAGE .
-        - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
+# build:
+#     stage: build
+#     script:
+#         - docker build -t $CONTAINER_IMAGE .
+#         - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
 
-test:
-    stage: test
-    script:
-        - docker pull $CONTAINER_IMAGE
-        - docker run $CONTAINER_IMAGE
+# test:
+#     stage: test
+#     script:
+#         - docker pull $CONTAINER_IMAGE
+#         - docker run $CONTAINER_IMAGE
 
 doc:
     stage: doc
@@ -59,7 +59,8 @@ doc:
 #      --makefile        \
 #      --no-batchfile    \
 #      --ext-autodoc
-        - docker run $CONTAINER_IMAGE /bin/bash -c sphinx-apidoc -o doc .
+        - docker run $CONTAINER_IMAGE /bin/bash -c cd doc
+        - docker run $CONTAINER_IMAGE /bin/bash -c sphinx-apidoc -h
 
 pages:
     image: "registry.gitlab.com/se_ml_course/ostroukhovpa/test_doc:task_4"
