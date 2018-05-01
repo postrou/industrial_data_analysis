@@ -33,6 +33,7 @@ build:
     script:
         # - echo $CI_LOGIN_TOKEN
         - echo $CI_JOB_TOKEN
+        - echo gitlab-ci-token
         # - docker build -t $CONTAINER_IMAGE .
         # - docker login registry.gitlab.com -u gitlab-ci-token -p $CI_LOGIN_TOKEN
         # - docker push $CONTAINER_IMAGE
