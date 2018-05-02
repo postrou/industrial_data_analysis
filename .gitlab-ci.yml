@@ -62,7 +62,7 @@ doc:
         # - docker run $CONTAINER_IMAGE /bin/sh
         - docker run $CONTAINER_IMAGE ls
         - docker run $CONTAINER_IMAGE ls doc
-        - docker run $CONTAINER_IMAGE /bin/sh chmod +x doc
+        - docker run $CONTAINER_IMAGE /bin/sh "chmod +x doc"
         - docker run $CONTAINER_IMAGE chmod -x doc
         - docker run $CONTAINER_IMAGE chmod +x doc
         - docker run $CONTAINER_IMAGE /bin/sh "cd doc"
