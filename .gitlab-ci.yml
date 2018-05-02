@@ -61,9 +61,9 @@ doc:
 #      --ext-autodoc
         - docker run $CONTAINER_IMAGE /bin/sh
         - docker run $CONTAINER_IMAGE ls
-        - docker run $CONTAINER_IMAGE cd doc
-        - docker run $CONTAINER_IMAGE ls
-        - docker run $CONTAINER_IMAGE cd ..
+        - docker run $CONTAINER_IMAGE ls doc
+        - docker run $CONTAINER_IMAGE /bin/sh "cd doc"
+        - docker run $CONTAINER_IMAGE /bin/sh "cd ..""
         - docker run $CONTAINER_IMAGE ls
         - docker run $CONTAINER_IMAGE sphinx-apidoc -f -o doc .
 
