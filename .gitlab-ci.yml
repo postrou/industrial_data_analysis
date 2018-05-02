@@ -37,15 +37,7 @@ doc:
     stage: doc
     script:
         - docker pull $CONTAINER_IMAGE
-        # - docker run $CONTAINER_IMAGE /bin/sh -c "chmod +x doc"
-        # - docker run $CONTAINER_IMAGE chmod -x doc
-        - docker run $CONTAINER_IMAGE chmod +x doc
-        - docker run $CONTAINER_IMAGE /bin/sh -c 'cd doc'
-        - docker run $CONTAINER_IMAGE ls
-        - docker run $CONTAINER_IMAGE /bin/sh -c 'cd ..'
-        - docker run $CONTAINER_IMAGE -w doc ls
-        - docker run $CONTAINER_IMAGE ls
-        - docker run $CONTAINER_IMAGE sphinx-apidoc -f -o doc .
+        - docker run -w doc $CONTAINER_IMAGE sphinx-apidoc -f -o . ..
 
 pages:
     stage: pages
