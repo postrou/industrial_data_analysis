@@ -33,6 +33,8 @@ test:
         - docker pull $CONTAINER_IMAGE
         - doceker run cd doc
         # - docker run $CONTAINER_IMAGE
+    only:
+        - merge-requests
 
 doc:
     stage: doc
