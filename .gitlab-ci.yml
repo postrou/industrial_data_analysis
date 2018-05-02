@@ -37,13 +37,13 @@ doc:
     stage: doc
     script:
         - docker pull $CONTAINER_IMAGE
-        - docker run -w doc $CONTAINER_IMAGE sphinx-apidoc -f -o . ..
+        - docker run -w /project/doc $CONTAINER_IMAGE sphinx-apidoc -f -o . ..
 
 pages:
     stage: pages
     script:
         - docker pull $CONTAINER_IMAGE
-        - docker run $CONTAINER_IMAGE -w doc make html
+        - docker run -w /project/doc $CONTAINER_IMAGE make html
         - mv doc/_build/html ./public
     artifacts:
         paths:
