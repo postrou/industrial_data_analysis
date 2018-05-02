@@ -29,17 +29,17 @@ before_script:
 variables:
   CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test_doc:task_4
 
-build:
-    stage: build
-    script:
-        - docker build -t $CONTAINER_IMAGE .
-        - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
+# build:
+#     stage: build
+#     script:
+#         - docker build -t $CONTAINER_IMAGE .
+#         - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
 
-test:
-    stage: test
-    script:
-        - docker pull $CONTAINER_IMAGE
-        - docker run $CONTAINER_IMAGE
+# test:
+#     stage: test
+#     script:
+#         - docker pull $CONTAINER_IMAGE
+#         - docker run $CONTAINER_IMAGE
 
 doc:
     stage: doc
@@ -59,9 +59,13 @@ doc:
 #      --makefile        \
 #      --no-batchfile    \
 #      --ext-autodoc
-        - docker run $CONTAINER_IMAGE /bin/bash -c ls
-        - docker run $CONTAINER_IMAGE /bin/bash -c "ls doc"
-        - docker run $CONTAINER_IMAGE /bin/bash -c "sphinx-apidoc -f -o doc ."
+        - docker run $CONTAINER_IMAGE /bin/sh
+        - docker run $CONTAINER_IMAGE ls
+        - docker run $CONTAINER_IMAGE cd doc
+        - docker run $CONTAINER_IMAGE ls
+        - docker run $CONTAINER_IMAGE cd ..
+        - docker run $CONTAINER_IMAGE ls
+        - docker run $CONTAINER_IMAGE sphinx-apidoc -f -o doc .
 
 pages:
     script:
