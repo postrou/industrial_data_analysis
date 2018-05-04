@@ -27,25 +27,25 @@ variables:
 #         - docker build -t $CONTAINER_IMAGE .
 #         - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
 
-test:
-    stage: test
-    script:
-        - docker pull $CONTAINER_IMAGE
-        # - doceker run cd doc
-        - docker run $CONTAINER_IMAGE
+# test:
+#     stage: test
+#     script:
+#         - docker pull $CONTAINER_IMAGE
+#         # - doceker run cd doc
+#         - docker run $CONTAINER_IMAGE
 
-doc:
-    stage: doc
-    script:
-        - docker pull $CONTAINER_IMAGE
-        - docker run -w /project/doc $CONTAINER_IMAGE sphinx-apidoc -f -o . ..
+# doc:
+#     stage: doc
+#     script:
+#         - docker pull $CONTAINER_IMAGE
+#         - docker run -w /project/doc $CONTAINER_IMAGE sphinx-apidoc -f -o . ..
 
 pages:
     stage: pages
     script:
         - docker pull $CONTAINER_IMAGE
         - docker run -w /project/doc $CONTAINER_IMAGE make html
-        - mv doc/_build/html ./public
+        - docker run $CONTAINER_IMAGE mv /project/doc/_build/html /project/public
     artifacts:
         paths:
             - /project/public
