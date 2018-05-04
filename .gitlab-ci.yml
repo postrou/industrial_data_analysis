@@ -31,8 +31,8 @@ test:
     stage: test
     script:
         - docker pull $CONTAINER_IMAGE
-        - doceker run cd doc
-        # - docker run $CONTAINER_IMAGE
+        # - doceker run cd doc
+        - docker run $CONTAINER_IMAGE
 
 doc:
     stage: doc
@@ -49,6 +49,6 @@ pages:
     artifacts:
         paths:
             - /project/public
-    only:
-        - master
-        - release
+    # only:
+    #     - master
+    #     - release
