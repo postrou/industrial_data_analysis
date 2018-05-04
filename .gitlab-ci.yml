@@ -45,10 +45,11 @@ pages:
     script:
         - docker pull $CONTAINER_IMAGE
         - docker run -w /project/doc $CONTAINER_IMAGE make html
-        - docker run $CONTAINER_IMAGE mv /project/doc/_build/html /project/public
+        # - docker run $CONTAINER_IMAGE mv /project/doc/_build/html /project/public
+        - docker cp $CONTAINER_IMAGE:/project/doc/_build/html ./public
     artifacts:
         paths:
-            - /project/public
+            - public
     # only:
     #     - master
     #     - release
