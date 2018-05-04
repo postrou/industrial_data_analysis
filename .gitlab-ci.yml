@@ -19,7 +19,7 @@ before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
 variables:
-  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test_doc:task_4
+  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test_doc
 
 # build:
 #     stage: build
