@@ -6,7 +6,7 @@ image: docker:dind
 #   DOCKER_DRIVER: overlay2
 
 services:
-  - docker
+  - docker:dind
 
 stages:
   - build
