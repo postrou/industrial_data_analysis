@@ -63,7 +63,7 @@ pages:
         - sphinx-apidoc -f -o doc .
         - cd doc
         - make html
-        - cp _build/html/ ../public
+        - cp -r _build/html/ ../public
     artifacts:
         paths:
             - public
