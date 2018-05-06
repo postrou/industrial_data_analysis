@@ -20,9 +20,9 @@ variables:
   CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test_doc:task_4
 
 build:
-    image: docker:stable
-    services:
-        - docker:dind
+    # image: docker:stable
+    # services:
+    #     - docker:dind
     stage: build
     script:
         - docker info
@@ -31,10 +31,10 @@ build:
         - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
 
 test:
-    stage: test
-    image: docker:stable
-    services:
-        - docker:dind
+    # stage: test
+    # image: docker:stable
+    # services:
+    #     - docker:dind
     script:
         - docker pull $CONTAINER_IMAGE
         - docker run $CONTAINER_IMAGE
