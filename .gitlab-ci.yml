@@ -1,4 +1,4 @@
-image: ubuntu
+# image: ubuntu
 
 # When using dind, it's wise to use the overlayfs driver for
 # improved performance.
@@ -8,13 +8,13 @@ image: ubuntu
 stages:
   - build
   - test
-  - doc
+#   - doc
   - pages
 
-before_script:
-    - apt-get update 
-    - apt-get install -y python3-pip python3-dev build-essential
-    - pip3 install -r requirements.txt
+# before_script:
+#     - apt-get update 
+#     - apt-get install -y python3-pip python3-dev build-essential
+#     - pip3 install -r requirements.txt
 
 variables:
   CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test_doc:task_4
@@ -39,22 +39,27 @@ test:
         - docker pull $CONTAINER_IMAGE
         - docker run $CONTAINER_IMAGE
 
-doc:
-    stage: doc
-    script:
-        # - docker pull $CONTAINER_IMAGE
-        # - docker run $CONTAINER_IMAGE sphinx-apidoc -f -o doc/ .
-        - sphinx-apidoc -f -o doc .
+# doc:
+#     stage: doc
+#     script:
+#         # - docker pull $CONTAINER_IMAGE
+#         # - docker run $CONTAINER_IMAGE sphinx-apidoc -f -o doc/ .
+#         - sphinx-apidoc -f -o doc .
 
 pages:
     stage: pages
+    image: ubuntu
     script:
         # - docker pull $CONTAINER_IMAGE
         # - docker run -w /project/doc $CONTAINER_IMAGE make html
         # - docker run -td $CONTAINER_IMAGE > cont_name.txt
         # - docker cp "$(< cont_name.txt)":/project/doc/_build/html public
         # - docker stop "$(< cont_name.txt)"
-        - docker cp $CONTAINER_IMAGE:/project/doc/_build/html/ ./public
+        # - docker cp $CONTAINER_IMAGE:/project/doc/_build/html/ ./public
+        - apt-get update 
+        - apt-get install -y python3-pip python3-dev build-essential
+        - pip3 install -r requirements.txt
+        - sphinx-apidoc -f -o doc .
         - cd doc
         - make html
         - cp _build/html/ ../public
