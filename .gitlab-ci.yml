@@ -1,4 +1,5 @@
-image: docker:stable
+# image: docker:stable
+image: ubuntu:stable
 
 # When using dind, it's wise to use the overlayfs driver for
 # improved performance.
@@ -15,6 +16,7 @@ stages:
   - pages
 
 before_script:
+    # image: docker:stable
     # - apt-get update 
     # - apt-get install -y python3-pip python3-dev build-essential
     # - pip3 install -r requirements.txt
@@ -24,14 +26,16 @@ before_script:
 variables:
   CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test_doc:task_4
 
-# build:
-#     stage: build
-#     script:
-#         - docker build -t $CONTAINER_IMAGE .
-#         - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
+build:
+    image: docker:stable
+    stage: build
+    script:
+        - docker build -t $CONTAINER_IMAGE .
+        - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
 
 # test:
 #     stage: test
+    # image: docker:stable
 #     script:
 #         - docker pull $CONTAINER_IMAGE
 #         - docker run $CONTAINER_IMAGE
@@ -46,15 +50,15 @@ variables:
 pages:
     stage: pages
     script:
-        - docker pull $CONTAINER_IMAGE
-        - docker run -w /project/doc $CONTAINER_IMAGE make html
-        - docker run -td $CONTAINER_IMAGE > cont_name.txt
-        - docker cp "$(< cont_name.txt)":/project/doc/_build/html public
-        - docker stop "$(< cont_name.txt)"
-        # - docker cp $CONTAINER_IMAGE:/project/doc/_build/html/ ./public
-        # - cd doc
-        # - make html
-        # - cp _build/html/ ../public
+        # - docker pull $CONTAINER_IMAGE
+        # - docker run -w /project/doc $CONTAINER_IMAGE make html
+        # - docker run -td $CONTAINER_IMAGE > cont_name.txt
+        # - docker cp "$(< cont_name.txt)":/project/doc/_build/html public
+        # - docker stop "$(< cont_name.txt)"
+        - docker cp $CONTAINER_IMAGE:/project/doc/_build/html/ ./public
+        - cd doc
+        - make html
+        - cp _build/html/ ../public
     artifacts:
         paths:
             - public
