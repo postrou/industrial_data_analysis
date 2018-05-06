@@ -21,32 +21,32 @@ before_script:
 variables:
   CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test_doc:task_4
 
-# build:
-#     stage: build
-#     script:
-#         - docker build -t $CONTAINER_IMAGE .
-#         - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
+build:
+    stage: build
+    script:
+        - docker build -t $CONTAINER_IMAGE .
+        - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
 
-# test:
-#     stage: test
-#     script:
-#         - docker pull $CONTAINER_IMAGE
-#         # - doceker run cd doc
-#         - docker run $CONTAINER_IMAGE
+test:
+    stage: test
+    script:
+        - docker pull $CONTAINER_IMAGE
+        - docker run $CONTAINER_IMAGE
 
-# doc:
-#     stage: doc
-#     script:
-#         - docker pull $CONTAINER_IMAGE
-#         - docker run -w /project/doc $CONTAINER_IMAGE sphinx-apidoc -f -o . ..
+doc:
+    stage: doc
+    script:
+        - sphinx-apidoc -f -o doc .
 
 pages:
     stage: pages
     script:
-        - docker pull $CONTAINER_IMAGE
-        - docker run -w /project/doc $CONTAINER_IMAGE make html
-        # - docker run $CONTAINER_IMAGE mv /project/doc/_build/html /project/public
-        - docker cp $CONTAINER_IMAGE:/project/doc/_build/html/ ./public
+        # - docker pull $CONTAINER_IMAGE
+        # - docker run -w /project/doc $CONTAINER_IMAGE make html
+        # - docker cp $CONTAINER_IMAGE:/project/doc/_build/html/ ./public
+        - cd doc
+        - make html
+        - cp _build/html/ ../public
     artifacts:
         paths:
             - public
