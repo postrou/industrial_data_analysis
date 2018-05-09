@@ -1,5 +1,8 @@
+flask
 numpy
 scipy
 pandas
 sklearn
 sphinx
+aws-shell
+boto3
