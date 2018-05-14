@@ -9,7 +9,7 @@ import numpy as np
 from model import RegressionModel
 
 
-def main(X_filename, model_filename):
+def main(X_filename, model_filename='regression_model.pkl'):
     """
     Call `predict` method from fitted `model` and save results to `result.txt`
 

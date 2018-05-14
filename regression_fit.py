@@ -9,7 +9,7 @@ import numpy as np
 from model import RegressionModel
 
 
-def main(X_filename, y_filename, model_filename):
+def main(X_filename, y_filename, model_filename='regression_model.pkl'):
     """
     Init RegressionModel object and call `fit` method with corresponding arguments and save it as `pickle`.
 
