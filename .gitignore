@@ -2,3 +2,4 @@ _*
 .idea*
 .ipynb*
 .coverage
+venv/
