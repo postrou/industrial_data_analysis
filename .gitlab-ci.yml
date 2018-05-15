@@ -1,23 +1,11 @@
-# image: ubuntu
-
-# When using dind, it's wise to use the overlayfs driver for
-# improved performance.
-# variables:
-#   DOCKER_DRIVER: overlay2
-
 stages:
-  - build
-  - test
-#   - doc
-  - pages
-
-# before_script:
-#     - apt-get update 
-#     - apt-get install -y python3-pip python3-dev build-essential
-#     - pip3 install -r requirements.txt
+    - build
+    - test
+    # - flask
+    - pages
 
 variables:
-  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test_doc:task_4
+  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test:task_5
 
 build:
     stage: build
@@ -28,7 +16,7 @@ build:
         - docker info
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker build -t $CONTAINER_IMAGE .
-        - docker push $CI_REGISTRY_IMAGE/test_doc:task_4
+        - docker push $CONTAINER_IMAGE
 
 test:
     stage: test
@@ -39,24 +27,22 @@ test:
         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
         - docker pull $CONTAINER_IMAGE
         - docker run $CONTAINER_IMAGE
+        
 
-# doc:
-#     stage: doc
+# flask:
+#     stage: flask
+#     image: docker:stable
+#     services:
+#         - docker:dind
 #     script:
-#         # - docker pull $CONTAINER_IMAGE
-#         # - docker run $CONTAINER_IMAGE sphinx-apidoc -f -o doc/ .
-#         - sphinx-apidoc -f -o doc .
+#         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#         - docker pull $CONTAINER_IMAGE
+#         - docker run $CONTAINER_IMAGE python3 flask_app.py
 
 pages:
     stage: pages
     image: ubuntu
     script:
-        # - docker pull $CONTAINER_IMAGE
-        # - docker run -w /project/doc $CONTAINER_IMAGE make html
-        # - docker run -td $CONTAINER_IMAGE > cont_name.txt
-        # - docker cp "$(< cont_name.txt)":/project/doc/_build/html public
-        # - docker stop "$(< cont_name.txt)"
-        # - docker cp $CONTAINER_IMAGE:/project/doc/_build/html/ ./public
         - apt-get update 
         - apt-get install -y python3-pip python3-dev build-essential
         - pip3 install -r requirements.txt
