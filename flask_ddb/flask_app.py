@@ -72,14 +72,22 @@ def fit():
     if models_table_name not in existing_tables:
         model_ddb.create_table(dynamodb)
     # else:
-    #     table = dynamodb.Table(models_table_name)
+    #     dynamodb.delete_table(TableName=models_table_name)
+    #     model_ddb.create_table(dynamodb)
     request_url = request.url
     model_ddb.add_model_to_db(dynamodb, models_table_name, model_bytes, request_url)
+
+    if data_table_name not in existing_tables:
+        data_ddb.create_table(dynamodb)
+    data_ddb.add_fit_data_to_db(dynamodb,
+                                data_table_name,
+                                pickle.dumps(X),
+                                pickle.dumps(y))
 
     return 'ok'
 
 
-@app.route('/app/predict/<path:data_filename>', methods=['GET'])
+@app.route('/app/predict/', methods=['GET'])
 def predict():
 
     return

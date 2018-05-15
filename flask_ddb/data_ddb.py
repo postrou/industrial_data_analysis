@@ -32,13 +32,27 @@ def create_table(client):
     )
 
 
-def add_data_to_db(client, table_name, data, purpose):
+def add_fit_data_to_db(client, table_name, X, y):
     client.put_item(
         TableName=table_name,
         Item={
-            'fit/predict':  {'S': purpose},
+            'fit/predict':  {'S': 'fit'},
             'time':         {'S': time.strftime('%b %d %Y %H:%M:%S')},
-            'data':         {'NS': data}
+            'X':            {'B': X},
+            'y':            {'B': y},
+        }
+    )
+
+    return 'ok'
+
+
+def add_predict_data_to_db(client, table_name, X):
+    client.put_item(
+        TableName=table_name,
+        Item={
+            'fit/predict':  {'S': 'predict'},
+            'time':         {'S': time.strftime('%b %d %Y %H:%M:%S')},
+            'X':            {'NS': list(X)},
         }
     )
 

@@ -1,34 +1,28 @@
-import boto3
 import time
-import pickle
 
 
-def create_table(endpoint_url="http://localhost:8000"):
-    dynamodb = boto3.resource('dynamodb', endpoint_url=endpoint_url)
-
-    table = dynamodb.create_table(
+def create_table(client):
+    client.create_table(
         TableName='Models',
         KeySchema=[
             {
-                'AttributeName': 'time',
-                'KeyType': 'HASH'  #Partition key
-            },
-
-            {
                 'AttributeName': 'name',
-                'KeyType': 'RANGE'  # Partition key
+                'KeyType': 'HASH'
+            },
+            {
+                'AttributeName': 'time',
+                'KeyType': 'RANGE'
             }
         ],
         AttributeDefinitions=[
             {
-                'AttributeName': 'time',
-                'AttributeType': 'S'
-            },
-            {
                 'AttributeName': 'name',
                 'AttributeType': 'S'
             },
-
+            {
+                'AttributeName': 'time',
+                'AttributeType': 'S'
+            }
         ],
         ProvisionedThroughput={
             'ReadCapacityUnits': 10,
@@ -36,16 +30,16 @@ def create_table(endpoint_url="http://localhost:8000"):
         }
     )
 
-    return table
 
-
-def add_model_to_db(table, model_filename='regression_model.pkl', name='linear_regression'):
-    with open(model_filename, 'rb') as f:
-        model = pickle.load(f)
-    table.put_item(
+def add_model_to_db(client, table_name, model, request, name='linear_regression'):
+    client.put_item(
+        TableName=table_name,
         Item={
-            'time': time.strftime('%b %d %Y %H:%M:%S'),
-            'name': name,
-            'model': model
+            'name':     {'S': name},
+            'time':     {'S': time.strftime('%b %d %Y %H:%M:%S')},
+            'model':    {'B': model},
+            'request':  {'S': request}
         }
     )
+
+    return 'ok'
