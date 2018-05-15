@@ -5,7 +5,7 @@ import boto3
 import numpy as np
 from flask import Flask, request
 
-from flask_ddb import model_ddb, data_ddb
+from flask_ddb import model_ddb, data_ddb, request_ddb
 from model import RegressionModel
 
 UPLOAD_FOLDER = '.'
@@ -17,21 +17,11 @@ dynamodb = boto3.client('dynamodb', endpoint_url="http://localhost:8000")
 
 models_table_name = 'Models'
 data_table_name = 'Data'
+requests_table_name = 'Requests'
 
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-
-# def upload_file():
-#     if request.method == 'POST':
-#         file = request.files['file']
-#         if file and allowed_file(file.filename):
-#             filename = secure_filename(file.filename)
-#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#             return redirect(url_for('uploaded_file',
-#                                     filename=filename))
-#     return
 
 
 # @app.route('/app/test', methods=['GET'])
@@ -75,7 +65,7 @@ def fit():
     #     dynamodb.delete_table(TableName=models_table_name)
     #     model_ddb.create_table(dynamodb)
     request_url = request.url
-    model_ddb.add_model_to_db(dynamodb, models_table_name, model_bytes, request_url)
+    model_ddb.add_model_to_db(dynamodb, models_table_name, model_bytes)
 
     if data_table_name not in existing_tables:
         data_ddb.create_table(dynamodb)
@@ -87,13 +77,35 @@ def fit():
                                 pickle.dumps(X),
                                 pickle.dumps(y))
 
+    if requests_table_name not in existing_tables:
+        request_ddb.create_table(dynamodb)
+    request_ddb.add_request_to_db(dynamodb,
+                                  requests_table_name,
+                                  request_url)
+
     return 'ok'
 
 
-@app.route('/app/predict/', methods=['GET'])
+@app.route('/app/predict/', methods=['POST'])
 def predict():
+    X_file = request.files['X']
 
-    return
+    if not (X_file and allowed_file(X_file.filename)):
+        return 'something wrong'
+
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    X_file_path = os.path.join(current_dir, '../data/' + X_file.filename)
+
+    X_file.save(X_file_path)
+
+    X = np.loadtxt(X_file_path)
+
+    model = pickle.loads(model_ddb.get_model_from_db(dynamodb,
+                                                     models_table_name,
+                                                     'linear_regression'))
+    y_result = model.predict(X)
+
+    return y_result
 
 
 if __name__ == '__main__':

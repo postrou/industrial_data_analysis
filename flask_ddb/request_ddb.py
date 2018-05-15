@@ -1,21 +1,20 @@
+# import time
+
+
 def create_table(client):
     client.create_table(
-        TableName='Models',
+        TableName='Requests',
         KeySchema=[
             {
-                'AttributeName': 'name',
+                'AttributeName': 'request',
                 'KeyType': 'HASH'
             },
         ],
         AttributeDefinitions=[
             {
-                'AttributeName': 'name',
+                'AttributeName': 'request',
                 'AttributeType': 'S'
             },
-            # {
-            #     'AttributeName': 'time',
-            #     'AttributeType': 'S'
-            # }
         ],
         ProvisionedThroughput={
             'ReadCapacityUnits': 10,
@@ -24,22 +23,21 @@ def create_table(client):
     )
 
 
-def add_model_to_db(client, table_name, model, name='linear_regression'):
+def add_request_to_db(client, table_name, request):
     client.put_item(
         TableName=table_name,
         Item={
-            'name':     {'S': name},
-            'model':    {'B': model},
+            'name': {'S': request},
         }
     )
 
     return 'ok'
 
 
-def get_model_from_db(client, table_name, name='linear_regression'):
+def get_request_from_db(client, table_name, request):
     client.get_item(
         TableName=table_name,
         Key={
-            'name': {'S': name},
+            'name': {'S': request},
         }
     )
