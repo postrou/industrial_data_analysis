@@ -1,4 +1,4 @@
-import time
+# import time
 
 
 def create_table(client):
@@ -10,20 +10,20 @@ def create_table(client):
                 'AttributeName': 'fit/predict',
                 'KeyType': 'HASH'
             },
-            {
-                'AttributeName': 'time',
-                'KeyType': 'RANGE'
-            },
+            # {
+            #     'AttributeName': 'time',
+            #     'KeyType': 'RANGE'
+            # },
         ],
         AttributeDefinitions=[
             {
                 'AttributeName': 'fit/predict',
                 'AttributeType': 'S'
             },
-            {
-                'AttributeName': 'time',
-                'AttributeType': 'S'
-            },
+            # {
+            #     'AttributeName': 'time',
+            #     'AttributeType': 'S'
+            # },
         ],
         ProvisionedThroughput={
             'ReadCapacityUnits': 10,
@@ -37,7 +37,7 @@ def add_fit_data_to_db(client, table_name, X, y):
         TableName=table_name,
         Item={
             'fit/predict':  {'S': 'fit'},
-            'time':         {'S': time.strftime('%b %d %Y %H:%M:%S')},
+            # 'time':         {'S': time.strftime('%b %d %Y %H:%M:%S')},
             'X':            {'B': X},
             'y':            {'B': y},
         }
@@ -51,8 +51,8 @@ def add_predict_data_to_db(client, table_name, X):
         TableName=table_name,
         Item={
             'fit/predict':  {'S': 'predict'},
-            'time':         {'S': time.strftime('%b %d %Y %H:%M:%S')},
-            'X':            {'NS': list(X)},
+            # 'time':         {'S': time.strftime('%b %d %Y %H:%M:%S')},
+            'X':            {'B': X},
         }
     )
 

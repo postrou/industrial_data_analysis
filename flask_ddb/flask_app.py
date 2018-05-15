@@ -53,8 +53,8 @@ def fit():
         return 'something wrong'
 
     current_dir = os.path.dirname(os.path.realpath(__file__))
-    X_file_path = os.path.join(current_dir, '../check/' + X_file.filename)
-    y_file_path = os.path.join(current_dir, '../check/' + y_file.filename)
+    X_file_path = os.path.join(current_dir, '../data/' + X_file.filename)
+    y_file_path = os.path.join(current_dir, '../data/' + y_file.filename)
 
     X_file.save(X_file_path)
     y_file.save(y_file_path)
@@ -65,7 +65,7 @@ def fit():
     model = RegressionModel()
     model.fit(X, y)
     model_bytes = pickle.dumps(model)
-    with open(os.path.join(current_dir, '../check/regression_model.pkl'), 'wb') as f:
+    with open(os.path.join(current_dir, '../data/regression_model.pkl'), 'wb') as f:
         f.write(model_bytes)
 
     existing_tables = dynamodb.list_tables()['TableNames']
@@ -79,6 +79,9 @@ def fit():
 
     if data_table_name not in existing_tables:
         data_ddb.create_table(dynamodb)
+    # else:
+    #     dynamodb.delete_table(TableName=data_table_name)
+    #     data_ddb.create_table(dynamodb)
     data_ddb.add_fit_data_to_db(dynamodb,
                                 data_table_name,
                                 pickle.dumps(X),

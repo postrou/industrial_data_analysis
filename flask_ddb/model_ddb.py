@@ -1,4 +1,4 @@
-import time
+# import time
 
 
 def create_table(client):
@@ -9,20 +9,20 @@ def create_table(client):
                 'AttributeName': 'name',
                 'KeyType': 'HASH'
             },
-            {
-                'AttributeName': 'time',
-                'KeyType': 'RANGE'
-            }
+            # {
+            #     'AttributeName': 'time',
+            #     'KeyType': 'RANGE'
+            # }
         ],
         AttributeDefinitions=[
             {
                 'AttributeName': 'name',
                 'AttributeType': 'S'
             },
-            {
-                'AttributeName': 'time',
-                'AttributeType': 'S'
-            }
+            # {
+            #     'AttributeName': 'time',
+            #     'AttributeType': 'S'
+            # }
         ],
         ProvisionedThroughput={
             'ReadCapacityUnits': 10,
@@ -36,7 +36,7 @@ def add_model_to_db(client, table_name, model, request, name='linear_regression'
         TableName=table_name,
         Item={
             'name':     {'S': name},
-            'time':     {'S': time.strftime('%b %d %Y %H:%M:%S')},
+            # 'time':     {'S': time.strftime('%b %d %Y %H:%M:%S')},
             'model':    {'B': model},
             'request':  {'S': request}
         }
