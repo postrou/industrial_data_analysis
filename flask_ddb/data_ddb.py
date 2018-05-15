@@ -1,33 +1,29 @@
-import boto3
 import time
 
 
-def create_table(endpoint_url="http://localhost:8000"):
-    dynamodb = boto3.resource('dynamodb', endpoint_url=endpoint_url)
+def create_table(client):
 
-    table = dynamodb.create_table(
-        TableName='Fit_data',
+    client.create_table(
+        TableName='Data',
         KeySchema=[
             {
-                'AttributeName': 'time',
-                'KeyType': 'HASH'  #Partition key
+                'AttributeName': 'fit/predict',
+                'KeyType': 'HASH'
             },
-
             {
-                'AttributeName': 'name',
-                'KeyType': 'RANGE'  # Partition key
-            }
+                'AttributeName': 'time',
+                'KeyType': 'RANGE'
+            },
         ],
         AttributeDefinitions=[
             {
-                'AttributeName': 'time',
+                'AttributeName': 'fit/predict',
                 'AttributeType': 'S'
             },
             {
-                'AttributeName': 'name',
+                'AttributeName': 'time',
                 'AttributeType': 'S'
             },
-
         ],
         ProvisionedThroughput={
             'ReadCapacityUnits': 10,
@@ -35,14 +31,15 @@ def create_table(endpoint_url="http://localhost:8000"):
         }
     )
 
-    return table
 
-
-def add_data_to_db(table, data, number=0):
-    table.put_item(
+def add_data_to_db(client, table_name, data, purpose):
+    client.put_item(
+        TableName=table_name,
         Item={
-            'time': time.strftime('%b %d %Y %H:%M:%S'),
-            'name': name,
-            'model': model
+            'fit/predict':  {'S': purpose},
+            'time':         {'S': time.strftime('%b %d %Y %H:%M:%S')},
+            'data':         {'NS': data}
         }
     )
+
+    return 'ok'

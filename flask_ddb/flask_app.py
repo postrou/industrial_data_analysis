@@ -1,17 +1,22 @@
 import os
-import unittest
-import numpy as np
-import boto3
 import pickle
+
+import boto3
+import numpy as np
 from flask import Flask, request
 
+from flask_ddb import model_ddb, data_ddb
 from model import RegressionModel
-
 
 UPLOAD_FOLDER = '.'
 ALLOWED_EXTENSIONS = 'txt'
 
 app = Flask(__name__)
+
+dynamodb = boto3.client('dynamodb', endpoint_url="http://localhost:8000")
+
+models_table_name = 'Models'
+data_table_name = 'Data'
 
 
 def allowed_file(filename):
@@ -29,28 +34,22 @@ def allowed_file(filename):
 #     return
 
 
-@app.route('/app/test', methods=['GET'])
-def test():
-    suite = unittest.TestLoader().loadTestsFromModule(test_project)
-    test_result = unittest.TextTestRunner(verbosity=2).run(suite)
-    if len(test_result.failures) != 0:
-        return test_result.failures[0][1]
-    return "ok!"
+# @app.route('/app/test', methods=['GET'])
+# def test():
+#     suite = unittest.TestLoader().loadTestsFromModule(test_project)
+#     test_result = unittest.TextTestRunner(verbosity=2).run(suite)
+#     if len(test_result.failures) != 0:
+#         return test_result.failures[0][1]
+#     return "ok!"
 
 
 @app.route('/app/fit/', methods=['POST'])
 def fit():
-    # if 'file' not in request.files:
-        # return "no file"
-
     X_file = request.files['X']
     y_file = request.files['y']
 
-    #
-    # if file and allowed_file(file.filename):
-    #     filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-    #     file.save(filepath)
-    if not (X_file and allowed_file(X_file.filename) and y_file and allowed_file(y_file.filename)):
+    if not (X_file and allowed_file(X_file.filename) and
+            y_file and allowed_file(y_file.filename)):
         return 'something wrong'
 
     current_dir = os.path.dirname(os.path.realpath(__file__))
@@ -65,14 +64,24 @@ def fit():
 
     model = RegressionModel()
     model.fit(X, y)
-    with open(os.path.join(current_dir, '../data/regression_model.pkl'), 'wb') as f:
-        pickle.dump(model, f)
+    model_bytes = pickle.dumps(model)
+    with open(os.path.join(current_dir, '../check/regression_model.pkl'), 'wb') as f:
+        f.write(model_bytes)
+
+    existing_tables = dynamodb.list_tables()['TableNames']
+    if models_table_name not in existing_tables:
+        model_ddb.create_table(dynamodb)
+    # else:
+    #     table = dynamodb.Table(models_table_name)
+    request_url = request.url
+    model_ddb.add_model_to_db(dynamodb, models_table_name, model_bytes, request_url)
 
     return 'ok'
 
 
 @app.route('/app/predict/<path:data_filename>', methods=['GET'])
-def predict(data_filename):
+def predict():
+
     return
 
 
