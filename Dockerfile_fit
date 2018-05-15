@@ -1,9 +1,0 @@
-FROM ubuntu:latest
-RUN apt-get update
-RUN apt-get install -y python3-pip python3-dev build-essential
-COPY regression_fit.py requirements.txt model.py /app/
-COPY data/ /app/data/
-WORKDIR /app/
-RUN pip3 install --upgrade pip
-RUN pip3 install --default-timeout=100 -r requirements.txt
-CMD ["python3", "regression_fit.py", "data/X_train", "data/y_train", "data/regression_model.pkl"]
