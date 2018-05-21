@@ -1,0 +1,8 @@
+flask
+numpy
+scipy
+pandas
+sphinx
+aws-shell
+boto3
+sklearn
