@@ -5,11 +5,14 @@ This file is a python script, fitting a model, given as an argument
 import sys
 import pickle
 import numpy as np
+import json
+import codecs
+
 
 from model import RegressionModel
 
 
-def main(X_filename, y_filename, model_filename='regression_model.pkl'):
+def main(X_filename='data/X_train.json', y_filename='data/y_train.json', model_filename='regression_model.pkl'):
     """
     Init RegressionModel object and call `fit` method with corresponding arguments and save it as `pickle`.
 
@@ -19,8 +22,9 @@ def main(X_filename, y_filename, model_filename='regression_model.pkl'):
     - `y_filename`: filename of `y` values form `f(X) = y`
     - `model_filename`: name of file to save model
     """
-    X = np.loadtxt(X_filename)
-    y = np.loadtxt(y_filename)
+
+    X = np.array(json.load(codecs.open(X_filename, 'r', encoding='utf-8')))
+    y = np.array(json.load(codecs.open(y_filename, 'r', encoding='utf-8')))
 
     reg_model = RegressionModel()
     reg_model.fit(X, y)

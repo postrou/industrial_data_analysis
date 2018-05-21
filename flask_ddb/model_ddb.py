@@ -37,9 +37,10 @@ def add_model_to_db(client, table_name, model, name='linear_regression'):
 
 
 def get_model_from_db(client, table_name, name='linear_regression'):
-    client.get_item(
+    model = client.get_item(
         TableName=table_name,
         Key={
             'name': {'S': name},
-        }
+        },
     )
+    return model['Item']['model']['B']

@@ -1,5 +1,3 @@
-# import time
-
 
 def create_table(client):
 

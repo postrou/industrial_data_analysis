@@ -27,7 +27,7 @@ def add_request_to_db(client, table_name, request):
     client.put_item(
         TableName=table_name,
         Item={
-            'name': {'S': request},
+            'request': {'S': request},
         }
     )
 

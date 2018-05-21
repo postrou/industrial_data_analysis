@@ -8,3 +8,4 @@ ostroukhovpa
    regression_fit
    regression_predict
    statemachine
+   test_project

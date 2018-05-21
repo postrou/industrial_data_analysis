@@ -1,12 +1,13 @@
-import os
 import pickle
+import numpy as np
+import json
 
 import boto3
-import numpy as np
 from flask import Flask, request
 
 from flask_ddb import model_ddb, data_ddb, request_ddb
 from model import RegressionModel
+
 
 UPLOAD_FOLDER = '.'
 ALLOWED_EXTENSIONS = 'txt'
@@ -20,65 +21,54 @@ data_table_name = 'Data'
 requests_table_name = 'Requests'
 
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-
-# @app.route('/app/test', methods=['GET'])
-# def test():
-#     suite = unittest.TestLoader().loadTestsFromModule(test_project)
-#     test_result = unittest.TextTestRunner(verbosity=2).run(suite)
-#     if len(test_result.failures) != 0:
-#         return test_result.failures[0][1]
-#     return "ok!"
-
-
-@app.route('/app/fit/', methods=['POST'])
-def fit():
-    X_file = request.files['X']
-    y_file = request.files['y']
-
-    if not (X_file and allowed_file(X_file.filename) and
-            y_file and allowed_file(y_file.filename)):
-        return 'something wrong'
-
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    X_file_path = os.path.join(current_dir, '../data/' + X_file.filename)
-    y_file_path = os.path.join(current_dir, '../data/' + y_file.filename)
-
-    X_file.save(X_file_path)
-    y_file.save(y_file_path)
-
-    X = np.loadtxt(X_file_path)
-    y = np.loadtxt(y_file_path)
-
-    model = RegressionModel()
-    model.fit(X, y)
-    model_bytes = pickle.dumps(model)
-    with open(os.path.join(current_dir, '../data/regression_model.pkl'), 'wb') as f:
-        f.write(model_bytes)
-
+def create_tables():
     existing_tables = dynamodb.list_tables()['TableNames']
+
     if models_table_name not in existing_tables:
         model_ddb.create_table(dynamodb)
     # else:
     #     dynamodb.delete_table(TableName=models_table_name)
     #     model_ddb.create_table(dynamodb)
-    request_url = request.url
-    model_ddb.add_model_to_db(dynamodb, models_table_name, model_bytes)
 
     if data_table_name not in existing_tables:
         data_ddb.create_table(dynamodb)
     # else:
     #     dynamodb.delete_table(TableName=data_table_name)
     #     data_ddb.create_table(dynamodb)
+
+    if requests_table_name not in existing_tables:
+        request_ddb.create_table(dynamodb)
+    # else:
+    #     dynamodb.delete_table(TableName=requests_table_name)
+    #     request_ddb.create_table(dynamodb)
+
+
+@app.route('/app/fit/', methods=['POST'])
+def fit():
+    # X_file = request.files['X']
+    # y_file = request.files['y']
+    if not request.is_json:
+        return "NO JSON!"
+    data = request.json
+    X = np.array(data['X'])
+    y = np.array(data['y'])
+    # X = np.array(json.loads(X_file.read().decode('utf-8')))
+    # y = np.array(json.loads(y_file.read().decode('utf-8')))
+
+    model = RegressionModel()
+    model.fit(X, y)
+    model_bytes = pickle.dumps(model)
+
+    model_ddb.add_model_to_db(dynamodb,
+                              models_table_name,
+                              model_bytes)
+
     data_ddb.add_fit_data_to_db(dynamodb,
                                 data_table_name,
                                 pickle.dumps(X),
                                 pickle.dumps(y))
 
-    if requests_table_name not in existing_tables:
-        request_ddb.create_table(dynamodb)
+    request_url = request.url
     request_ddb.add_request_to_db(dynamodb,
                                   requests_table_name,
                                   request_url)
@@ -86,27 +76,26 @@ def fit():
     return 'ok'
 
 
-@app.route('/app/predict/', methods=['POST'])
+@app.route('/app/predict/', methods=['PUT'])
 def predict():
-    X_file = request.files['X']
-
-    if not (X_file and allowed_file(X_file.filename)):
-        return 'something wrong'
-
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    X_file_path = os.path.join(current_dir, '../data/' + X_file.filename)
-
-    X_file.save(X_file_path)
-
-    X = np.loadtxt(X_file_path)
+    if dynamodb.describe_table(TableName=models_table_name)['Table']['ItemCount'] == 0:
+        return "table is empty"
+    if not request.is_json:
+        return "NO JSON!"
+    X = np.array(request.json)
 
     model = pickle.loads(model_ddb.get_model_from_db(dynamodb,
                                                      models_table_name,
                                                      'linear_regression'))
     y_result = model.predict(X)
+    y_result_json = json.dumps(y_result.tolist(),
+                               separators=(',', ':'),
+                               sort_keys=True,
+                               indent=4)
 
-    return y_result
+    return y_result_json
 
 
 if __name__ == '__main__':
+    create_tables()
     app.run()
