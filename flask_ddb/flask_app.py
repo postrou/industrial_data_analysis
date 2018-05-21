@@ -1,16 +1,17 @@
 import pickle
 import numpy as np
 import json
+import sys
+import os.path
 
 import boto3
 from flask import Flask, request
 
-from flask_ddb import model_ddb, data_ddb, request_ddb
+import model_ddb, data_ddb, request_ddb
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
 from model import RegressionModel
-
-
-UPLOAD_FOLDER = '.'
-ALLOWED_EXTENSIONS = 'txt'
 
 app = Flask(__name__)
 
@@ -45,15 +46,11 @@ def create_tables():
 
 @app.route('/app/fit/', methods=['POST'])
 def fit():
-    # X_file = request.files['X']
-    # y_file = request.files['y']
     if not request.is_json:
         return "NO JSON!"
     data = request.json
     X = np.array(data['X'])
     y = np.array(data['y'])
-    # X = np.array(json.loads(X_file.read().decode('utf-8')))
-    # y = np.array(json.loads(y_file.read().decode('utf-8')))
 
     model = RegressionModel()
     model.fit(X, y)
