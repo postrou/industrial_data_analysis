@@ -1,11 +1,10 @@
 stages:
-    - build
-    - test
-    # - flask
-    - pages
+  - build
+  - test
+  - pages
 
 variables:
-  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test:task_5
+  CONTAINER_IMAGE: $CI_REGISTRY_IMAGE/test:task_4
 
 build:
     stage: build
@@ -28,17 +27,6 @@ test:
         - docker pull $CONTAINER_IMAGE
         - docker run $CONTAINER_IMAGE
         
-
-# flask:
-#     stage: flask
-#     image: docker:stable
-#     services:
-#         - docker:dind
-#     script:
-#         - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#         - docker pull $CONTAINER_IMAGE
-#         - docker run $CONTAINER_IMAGE python3 flask_app.py
-
 pages:
     stage: pages
     image: ubuntu
@@ -53,6 +41,3 @@ pages:
     artifacts:
         paths:
             - public
-    # only:
-    #     - master
-    #     - release
