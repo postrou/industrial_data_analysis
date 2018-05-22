@@ -1,0 +1,1 @@
+curl -X PUT -H "Content-Type: application/json" -d $(cat data/X_test.json) http://127.0.0.1:5000/app/predict/	
