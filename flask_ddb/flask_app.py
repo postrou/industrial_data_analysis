@@ -1,13 +1,15 @@
-import pickle
-import numpy as np
 import json
-import sys
 import os.path
+import pickle
+import sys
 
 import boto3
-from flask import Flask, request
+import numpy as np
+from flask import Flask, request, jsonify
 
-import model_ddb, data_ddb, request_ddb
+import data_ddb
+import model_ddb
+import request_ddb
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -81,16 +83,28 @@ def predict():
         return "NO JSON!"
     X = np.array(request.json)
 
+    data_ddb.add_predict_data_to_db(dynamodb,
+                                    data_table_name,
+                                    pickle.dumps(X))
     model = pickle.loads(model_ddb.get_model_from_db(dynamodb,
                                                      models_table_name,
                                                      'linear_regression'))
     y_result = model.predict(X)
-    y_result_json = json.dumps(y_result.tolist(),
-                               separators=(',', ':'),
-                               sort_keys=True,
-                               indent=4)
+    # y_result_json = json.dumps(y_result.tolist(),
+    #                            separators=(',', ':'),
+    #                            sort_keys=True,
+    #                            indent=4)
 
-    return y_result_json
+    return jsonify(result=y_result.tolist())
+
+
+# @app.route('/app/get/<path:get_what>', methods=['GET'])
+# def get(get_what):
+#     get_what = get_what.split('/')
+#     if get_what[0] == 'data':
+#         if dynamodb.describe_table(TableName=data_table_name)['Table']['ItemCount'] == 0:
+#             return "table is empty"
+
 
 
 if __name__ == '__main__':
