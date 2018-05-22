@@ -69,10 +69,10 @@ def fit():
                                 pickle.dumps(X),
                                 pickle.dumps(y))
 
-    request_url = request.url
-    request_ddb.add_request_to_db(dynamodb,
-                                  requests_table_name,
-                                  request_url)
+    # request_url = request.url
+    # request_ddb.add_request_to_db(dynamodb,
+    #                               requests_table_name,
+    #                               request_url)
 
     return 'ok'
 
