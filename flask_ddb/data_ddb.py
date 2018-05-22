@@ -55,13 +55,3 @@ def add_predict_data_to_db(client, table_name, X):
     )
 
     return 'ok'
-
-
-# def get_data_from_db(client, table_name, type_of):
-#     data = client.get_item(
-#         TableName=table_name,
-#         Key={
-#             'fit/predict': {'S': type_of},
-#         },
-#     )
-#     return data['Item']['X']['S']

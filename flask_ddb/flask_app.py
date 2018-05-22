@@ -1,4 +1,3 @@
-import json
 import os.path
 import pickle
 import sys
@@ -15,13 +14,17 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from model import RegressionModel
 
+
 app = Flask(__name__)
 
-dynamodb = boto3.client('dynamodb', endpoint_url="http://localhost:8000")
 
-models_table_name = 'Models'
-data_table_name = 'Data'
-requests_table_name = 'Requests'
+def init_model():
+    if dynamodb.describe_table(TableName=models_table_name)['Table']['ItemCount'] == 0:
+        return RegressionModel()
+    else:
+        return pickle.loads(model_ddb.get_model_from_db(dynamodb,
+                                                        models_table_name,
+                                                        'linear_regression'))
 
 
 def create_tables():
@@ -54,7 +57,6 @@ def fit():
     X = np.array(data['X'])
     y = np.array(data['y'])
 
-    model = RegressionModel()
     model.fit(X, y)
     model_bytes = pickle.dumps(model)
 
@@ -86,27 +88,19 @@ def predict():
     data_ddb.add_predict_data_to_db(dynamodb,
                                     data_table_name,
                                     pickle.dumps(X))
-    model = pickle.loads(model_ddb.get_model_from_db(dynamodb,
-                                                     models_table_name,
-                                                     'linear_regression'))
+
     y_result = model.predict(X)
-    # y_result_json = json.dumps(y_result.tolist(),
-    #                            separators=(',', ':'),
-    #                            sort_keys=True,
-    #                            indent=4)
 
     return jsonify(result=y_result.tolist())
 
 
-# @app.route('/app/get/<path:get_what>', methods=['GET'])
-# def get(get_what):
-#     get_what = get_what.split('/')
-#     if get_what[0] == 'data':
-#         if dynamodb.describe_table(TableName=data_table_name)['Table']['ItemCount'] == 0:
-#             return "table is empty"
-
-
-
 if __name__ == '__main__':
+    dynamodb = boto3.client('dynamodb', endpoint_url="http://localhost:8000")
+
+    models_table_name = 'Models'
+    data_table_name = 'Data'
+    requests_table_name = 'Requests'
+
+    model = init_model()
     create_tables()
     app.run()
