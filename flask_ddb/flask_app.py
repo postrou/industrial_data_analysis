@@ -10,9 +10,7 @@ import data_ddb
 import model_ddb
 import request_ddb
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-
-from model import RegressionModel
+from ..model import RegressionModel
 
 
 app = Flask(__name__)
